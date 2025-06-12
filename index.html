@@ -13,7 +13,7 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
             padding: 20px;
             color: #1f2937;
@@ -31,20 +31,25 @@
         
         .header h1 {
             font-size: 3rem;
-            color: #f1f5f9;
+            color: #ffffff;
             margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 3px 6px rgba(0,0,0,0.4);
+            font-weight: 800;
         }
         
         .header p {
-            color: #cbd5e1;
+            color: #ffffff;
             font-size: 1.2rem;
             margin-bottom: 5px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .header .date {
-            color: #94a3b8;
+            color: #f3f4f6;
             font-size: 1rem;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
         
         .summary-grid {
@@ -96,6 +101,7 @@
             background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
             padding: 30px;
             color: white;
+            text-align: center;
         }
         
         .roster-header h2 {
@@ -230,29 +236,38 @@
         .legend {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin: 20px 0;
+            gap: 40px;
+            margin: 30px 0;
             flex-wrap: wrap;
+            background: rgba(30, 41, 59, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            font-size: 0.9rem;
-            color: #374151;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1f2937;
+            background: rgba(248, 250, 252, 0.9);
+            padding: 10px 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .legend-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
-            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            margin-right: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
         
         .legend-sales { background: #10b981; }
         .legend-patient-care { background: #3b82f6; }
         .legend-off { background: #9ca3af; }
-        .legend-wfh { background: #8b5cf6; }
         
         .shift-cell {
             padding: 8px 6px;
@@ -313,6 +328,10 @@
                 align-items: center;
                 gap: 15px;
             }
+            
+            .legend-item {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -339,7 +358,7 @@
                 
                 <div class="summary-card">
                     <h3>Working Days</h3>
-                    <div class="value" id="workingDays">0</div>
+                    <div class="value">22</div>
                     <div class="subtitle">Business days in June</div>
                 </div>
                 
@@ -365,15 +384,11 @@
                 <div class="legend">
                     <div class="legend-item">
                         <div class="legend-dot legend-sales"></div>
-                        <span><strong>Sales Team Working</strong></span>
+                        <span>Sales Team Working</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-dot legend-patient-care"></div>
-                        <span><strong>Patient Care Working</strong></span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-dot legend-wfh"></div>
-                        <span>Work From Home</span>
+                        <span>Patient Care Working</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-dot legend-off"></div>
@@ -476,7 +491,6 @@
 
         function calculateSummaryStats(employees, roster) {
             const totalEmployees = employees.length;
-            const workingDays = roster.filter(day => !isWeekend(day.day)).length;
             
             let weekendCoverage = 0;
             let totalDailyStaff = 0;
@@ -500,7 +514,6 @@
             
             return {
                 totalEmployees,
-                workingDays,
                 weekendCoverage,
                 avgDailyStaff
             };
@@ -569,7 +582,6 @@
                 
                 // Update summary cards
                 document.getElementById('totalEmployees').textContent = stats.totalEmployees;
-                document.getElementById('workingDays').textContent = stats.workingDays;
                 document.getElementById('weekendCoverage').textContent = stats.weekendCoverage;
                 document.getElementById('avgDailyStaff').textContent = stats.avgDailyStaff;
                 
