@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greencare Employee Roster - June 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #1f2937;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            color: #f1f5f9;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            color: #cbd5e1;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .header .date {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .summary-card {
+            background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid #475569;
+            text-align: center;
+        }
+        
+        .summary-card h3 {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+        
+        .summary-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 5px;
+        }
+        
+        .summary-card .subtitle {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+        
+        .roster-container {
+            background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            overflow: hidden;
+            border: 1px solid #475569;
+            margin-bottom: 30px;
+        }
+        
+        .roster-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+            padding: 30px;
+            color: white;
+        }
+        
+        .roster-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        
+        .roster-header p {
+            color: #bfdbfe;
+        }
+        
+        .roster-table-container {
+            overflow-x: auto;
+        }
+        
+        .roster-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .roster-table th {
+            background: #f9fafb;
+            padding: 15px 12px;
+            text-align: center;
+            font-weight: 600;
+            color: #374151;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .roster-table th.date-col {
+            min-width: 120px;
+            background: #1f2937;
+            color: white;
+        }
+        
+        .roster-table th.employee-col {
+            min-width: 100px;
+        }
+        
+        .roster-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            border-right: 1px solid #e5e7eb;
+            color: #1f2937;
+        }
+        
+        .roster-table td.date-cell {
+            background: #1f2937;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .roster-table tr:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .roster-table th.sales-team {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            font-weight: 700;
+        }
+        
+        .roster-table th.patient-care-team {
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+            color: white;
+            font-weight: 700;
+        }
+        
+        .sales-member .shift-working {
+            background: #dcfce7;
+            color: #166534;
+            border: 2px solid #16a34a;
+            font-weight: 700;
+        }
+        
+        .sales-member .shift-off {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            font-weight: 500;
+        }
+        
+        .sales-member .shift-wfh {
+            background: #ddd6fe;
+            color: #5b21b6;
+            border: 2px solid #7c3aed;
+            font-weight: 700;
+        }
+        
+        .patient-care-member .shift-working {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 2px solid #3b82f6;
+            font-weight: 700;
+        }
+        
+        .patient-care-member .shift-off {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            font-weight: 500;
+        }
+        
+        .patient-care-member .shift-wfh {
+            background: #ddd6fe;
+            color: #5b21b6;
+            border: 2px solid #7c3aed;
+            font-weight: 700;
+        }
+        
+        .roster-table td.sales-member {
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .roster-table td.patient-care-member {
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .weekend {
+            background: rgba(139, 92, 246, 0.05);
+        }
+        
+        .today {
+            background: rgba(245, 158, 11, 0.1);
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #374151;
+        }
+        
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 8px;
+        }
+        
+        .legend-sales { background: #10b981; }
+        .legend-patient-care { background: #3b82f6; }
+        .legend-off { background: #9ca3af; }
+        .legend-wfh { background: #8b5cf6; }
+        
+        .shift-cell {
+            padding: 8px 6px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            min-height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.2;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
+            flex-direction: column;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .roster-table {
+                font-size: 0.8rem;
+            }
+            
+            .roster-table th,
+            .roster-table td {
+                padding: 8px 6px;
+            }
+            
+            .legend {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👥 Greencare Employee Roster</h1>
+            <p>Monthly Schedule Overview & Staff Coverage</p>
+            <p class="date">June 2025 • Executive View</p>
+        </div>
+        
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <div style="color: #cbd5e1;">Loading roster data...</div>
+        </div>
+        
+        <div id="dashboard" style="display: none;">
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>Total Employees</h3>
+                    <div class="value" id="totalEmployees">0</div>
+                    <div class="subtitle">Active staff members</div>
+                </div>
+                
+                <div class="summary-card">
+                    <h3>Working Days</h3>
+                    <div class="value" id="workingDays">0</div>
+                    <div class="subtitle">Business days in June</div>
+                </div>
+                
+                <div class="summary-card">
+                    <h3>Weekend Coverage</h3>
+                    <div class="value" id="weekendCoverage">0</div>
+                    <div class="subtitle">Staff on weekends</div>
+                </div>
+                
+                <div class="summary-card">
+                    <h3>Avg Daily Staff</h3>
+                    <div class="value" id="avgDailyStaff">0</div>
+                    <div class="subtitle">Average per day</div>
+                </div>
+            </div>
+            
+            <div class="roster-container">
+                <div class="roster-header">
+                    <h2>📅 June 2025 Staff Schedule</h2>
+                    <p>Complete monthly roster with shift times and coverage</p>
+                </div>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-dot legend-sales"></div>
+                        <span><strong>Sales Team Working</strong></span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot legend-patient-care"></div>
+                        <span><strong>Patient Care Working</strong></span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot legend-wfh"></div>
+                        <span>Work From Home</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot legend-off"></div>
+                        <span>Off / Not Scheduled</span>
+                    </div>
+                </div>
+                
+                <div class="roster-table-container">
+                    <table class="roster-table">
+                        <thead id="rosterHeader">
+                            <!-- Headers will be populated here -->
+                        </thead>
+                        <tbody id="rosterBody">
+                            <!-- Roster data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Your roster data
+        const rosterData = `May,DAY ,James ,Candice,Kurt,Ed,Jeff,Jan,Charmaine,Kirrilly ,Grace
+1st,Sunday,,,,,,,,,
+2nd,Monday,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+3rd,Tuesday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+4th,Wednesday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+5th,Thursday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+6th,Friday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+7th,Saturday,,9 to 5pm,,,9 to 5pm,,9am to 2pm,,
+8th,Sunday,,,,,,,,,
+9th,Monday,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+10th,Tuesday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+11th,Wednesday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+12th,Thursday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+13th,Friday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+14th,Saturday,,9 to 5pm,,,9 to 5pm,,9am to 2pm,,
+15th,Sunday,,,,,,,,,
+16th,Monday,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+17th,Tuesday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+18th,Wednesday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+19th,Thursday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+20th,Friday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+21st,Saturday,,9 to 5pm,,,9 to 5pm,,9am to 2pm,,
+22nd,Sunday,,,,,,,,,
+23rd,Monday,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+24th,Tuesday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+25th,Wednesday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+26th,Thursday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,9 to 5pm
+27th,Friday ,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,WFH,9am to 6pm ,9 to 5pm,9 to 5pm
+28th,Saturday,,9 to 5pm,,,9 to 5pm,,9am to 2pm,,
+29th,Sunday,,,,,,,,,
+30th,Monday,9 to 5pm,8:30 to 6pm,9 to 5pm,9 to 5pm,9 to 5pm,10am to 5pm ,9am to 6pm ,9 to 5pm,10am to 2pm`;
+
+        function parseRosterData(csvText) {
+            const lines = csvText.trim().split('\n');
+            const headers = lines[0].split(',');
+            
+            // Clean headers
+            const employees = headers.slice(2).map(h => h.trim());
+            
+            const roster = [];
+            for (let i = 1; i < lines.length; i++) {
+                const cells = lines[i].split(',');
+                const date = cells[0] ? cells[0].trim() : '';
+                const day = cells[1] ? cells[1].trim() : '';
+                
+                const shifts = {};
+                employees.forEach((employee, index) => {
+                    const shift = cells[index + 2] ? cells[index + 2].trim() : '';
+                    shifts[employee] = shift;
+                });
+                
+                roster.push({
+                    date: date,
+                    day: day,
+                    shifts: shifts
+                });
+            }
+            
+            return { employees, roster };
+        }
+
+        function getShiftType(shift) {
+            if (!shift || shift === '') return 'off';
+            if (shift.toLowerCase().includes('wfh')) return 'wfh';
+            return 'working';
+        }
+
+        function formatShift(shift) {
+            if (!shift || shift === '') return 'Off';
+            if (shift.toLowerCase().includes('wfh')) return 'WFH';
+            return shift;
+        }
+
+        function isWeekend(day) {
+            return day.toLowerCase().includes('saturday') || day.toLowerCase().includes('sunday');
+        }
+
+        function calculateSummaryStats(employees, roster) {
+            const totalEmployees = employees.length;
+            const workingDays = roster.filter(day => !isWeekend(day.day)).length;
+            
+            let weekendCoverage = 0;
+            let totalDailyStaff = 0;
+            let workingDaysCount = 0;
+            
+            roster.forEach(day => {
+                const dailyStaff = employees.filter(emp => {
+                    const shift = day.shifts[emp];
+                    return shift && shift !== '' && !shift.toLowerCase().includes('wfh');
+                }).length;
+                
+                if (isWeekend(day.day)) {
+                    if (dailyStaff > 0) weekendCoverage++;
+                } else {
+                    totalDailyStaff += dailyStaff;
+                    workingDaysCount++;
+                }
+            });
+            
+            const avgDailyStaff = workingDaysCount > 0 ? Math.round(totalDailyStaff / workingDaysCount) : 0;
+            
+            return {
+                totalEmployees,
+                workingDays,
+                weekendCoverage,
+                avgDailyStaff
+            };
+        }
+
+        function renderRoster(employees, roster) {
+            // Define team structure
+            const salesTeam = ['James', 'Candice', 'Kurt', 'Ed', 'Jeff'];
+            const patientCareTeam = ['Jan', 'Charmaine', 'Kirrilly', 'Grace'];
+            
+            // Render header
+            const header = document.getElementById('rosterHeader');
+            header.innerHTML = `
+                <tr>
+                    <th class="date-col">Date</th>
+                    <th class="date-col">Day</th>
+                    ${employees.map(emp => {
+                        const teamClass = salesTeam.includes(emp) ? 'sales-team' : 'patient-care-team';
+                        return `<th class="employee-col ${teamClass}">${emp}</th>`;
+                    }).join('')}
+                </tr>
+            `;
+            
+            // Render body
+            const tbody = document.getElementById('rosterBody');
+            tbody.innerHTML = '';
+            
+            roster.forEach(day => {
+                const row = document.createElement('tr');
+                
+                // Add weekend class
+                if (isWeekend(day.day)) {
+                    row.classList.add('weekend');
+                }
+                
+                // Date and day cells
+                row.innerHTML = `
+                    <td class="date-cell">${day.date}</td>
+                    <td class="date-cell">${day.day}</td>
+                `;
+                
+                // Employee shift cells
+                employees.forEach(employee => {
+                    const shift = day.shifts[employee] || '';
+                    const shiftType = getShiftType(shift);
+                    const formattedShift = formatShift(shift);
+                    const teamClass = salesTeam.includes(employee) ? 'sales-member' : 'patient-care-member';
+                    
+                    const cell = document.createElement('td');
+                    cell.className = teamClass;
+                    cell.innerHTML = `<div class="shift-cell shift-${shiftType}">${formattedShift}</div>`;
+                    row.appendChild(cell);
+                });
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadDashboard() {
+            setTimeout(() => {
+                const { employees, roster } = parseRosterData(rosterData);
+                console.log('Parsed roster:', { employees, roster });
+                
+                // Calculate summary stats
+                const stats = calculateSummaryStats(employees, roster);
+                
+                // Update summary cards
+                document.getElementById('totalEmployees').textContent = stats.totalEmployees;
+                document.getElementById('workingDays').textContent = stats.workingDays;
+                document.getElementById('weekendCoverage').textContent = stats.weekendCoverage;
+                document.getElementById('avgDailyStaff').textContent = stats.avgDailyStaff;
+                
+                // Render roster table
+                renderRoster(employees, roster);
+                
+                // Show dashboard
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+            }, 2000);
+        }
+
+        // Initialize dashboard
+        window.addEventListener('load', loadDashboard);
+    </script>
+</body>
+</html>
